@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="box">
+    <div class="form-group" style="width:500px;height:600px;padding-top:50px;">
+        <label for="exampleFormControlTextarea1" style="padding-left:80px;">Non-Formatted Json</label>
+        <textarea class="pre-scrollable" id="nonFormattedJson" rows="10" style="width:500px;height:600px;border:double"></textarea>
+    </div>
+
+    <div class="form-group" style="width:500px;height:600px;padding-top:50px;">
+        <label for="exampleFormControlTextarea2" style="padding-left:80px;">Formatted Json</label>
+        <div class="pre-scrollable" id="formattedJson" rows="10" style="width:500px;height:600px;border:double;background-color:aquamarine" readonly></div>
+
+    </div>
+    <div style="padding-top:230px;padding-left:50px;">
+        <button class="btn btn-success btn-lg center-block" onclick="jsonFormatter()">Convert</button>
+    </div>
+</div>
+
+<script>
+    function jsonFormatter()
+    {
+        var data = document.getElementById("nonFormattedJson")
+        $.ajax({
+           type: 'POST',
+           dataType: 'json',
+            url: '/Home/FormattedJsonConverter',
+            data: { nonFormattedJson: data.value },
+            success: function (Data) {
+                var jsonObj = {};
+                var jsonViewer = new JSONViewer();
+                document.querySelector("#formattedJson").appendChild(jsonViewer.getContainer());
+                jsonObj = JSON.parse(Data);
+                jsonViewer.showJSON(jsonObj);
+           }
+       });
+    }
+</script>
+<style>
+    .box {
+        display: flex;
+        justify-content: space-between;
+    }
+</style>
